@@ -1,5 +1,24 @@
+$setup = <<EOF
+apt-get -y update
+apt-get -y install unzip
+apt-get -y install tree
+apt-get -y install mysql-client
+apt-get -y install postgresql-client
+curl -LSs -o /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+chmod 0755 /usr/local/bin/jq
+
+docker pull mysql
+docker pull postgres
+docker pull quintessence/chinook-mysql
+
+for i in {1..10}; do
+  useradd -m -s /bin/bash -G docker student${i}
+done
+EOF
+
 Vagrant.configure('2') do |config|
   config.vm.define "gdiclass" do |config|
+      config.vm.provision "shell", privileged: false, inline: $setup
       config.vm.provider :digital_ocean do |provider, override|
         override.ssh.private_key_path = '~/.ssh/digitalocean_vagrant'
         provider.ssh_key_name = 'Vagrant'
