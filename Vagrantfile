@@ -11,8 +11,8 @@ docker pull mysql
 docker pull postgres
 docker pull quintessence/chinook-mysql
 
-for i in {1..10}; do
-  useradd -m -s /bin/bash -G docker student${i}
+for user in student{1..10} instructor; do
+  useradd -m -s /bin/bash -G docker ${user}
 done
 EOF
 

@@ -2,12 +2,12 @@
 
 password=${1:-p@ssw0rd}
 
-for i in {1..10}; do
-  echo "student${i}:${password}" | chpasswd
-  docker run --detach --name=chinook-mysql-student${i} quintessence/chinook-mysql
+for user in {1..10} instructor; do
+  echo "${user}:${password}" | chpasswd
+  docker run --detach --name=chinook-mysql-${user} quintessence/chinook-mysql
   sleep 2
-  docker run --detach --name=mysql-student${i} --env="MYSQL_ROOT_PASSWORD=p@ssw0rd" mysql:latest
+  docker run --detach --name=mysql-${user} --env="MYSQL_ROOT_PASSWORD=p@ssw0rd" mysql:latest
   sleep 2
-  docker run --detach --name=postgres-student${i} -d postgres:latest
+  docker run --detach --name=postgres-${user} -d postgres:latest
   sleep 2
 done
