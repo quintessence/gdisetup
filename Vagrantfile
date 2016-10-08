@@ -27,7 +27,7 @@ Vagrant.configure('2') do |config|
         provider.token = ENV['OCEANTOKEN']
         provider.image = 'docker-16-04'           # Docker v1.12.1, Ubuntu 16.04
         provider.region = 'nyc2'
-        provider.size = '512mb'
+        provider.size = '4gb'
       end
   end
 end
