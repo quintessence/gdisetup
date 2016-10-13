@@ -2,7 +2,7 @@
 
 password=${1:-p@ssw0rd}
 
-for user in {1..10} instructor; do
+for user in student{1..10} instructor; do
   echo "${user}:${password}" | chpasswd
   docker run --detach --name=chinook-mysql-${user} quintessence/chinook-mysql
   sleep 2
