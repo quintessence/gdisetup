@@ -5,7 +5,6 @@ Setup DigitalOcean droplets for GDI Classes
 
 * [Vagrant](https://www.vagrantup.com/docs/why-vagrant/) v 1.7+
 * The [DigitalOcean Vagrant plugin](https://www.digitalocean.com/community/tutorials/how-to-use-digitalocean-as-your-provider-in-vagrant-on-an-ubuntu-12-10-vps), to install:<br />`vagrant plugin install vagrant-digitalocean`
-* [Packer](https://www.packer.io/intro/) v 0.10.1
 * `OCEANTOKEN` environment variable storing your DigitalOcean token
   * [How to generate a DigitalOcean token](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2) - note that the token must have Read+Write access
 
