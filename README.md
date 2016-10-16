@@ -20,6 +20,17 @@ $ vagrant digitalocean-list sizes ${OCEANTOKEN}
 
 For more information about the digital_ocean Vagrant plugin, please refer to their [README](https://github.com/devopsgroup-io/vagrant-digitalocean).
 
+## Building/Destroying the DigitalOcean Droplet
+
+To start a DigitalOcean droplet, you will need to clone this repository and save your DigitalOcean token in `tokens/digitaloceantoken` as `OCEANTOKEN`. ([Here](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2) is DigitalOcean's documentation explaining how to create the token.)
+
+```
+$ source tokens/digitaloceantoken
+$ vagrant up
+```
+
+When you are done, remember to run `vagrant destroy` from within the project repository to tear down the environment. DigitalOcean charges for spinning up droplets and although the per-hour cost is very low, you might incur unexpected expenses if you forget to destroy your droplet(s).
+
 ## Admin Duties
 
 If you wish students to be able to `ssh` into the student envrionment using a password instead of an SSH key, remember to enable `PasswordAuthentication` in `/etc/ssh/sshd_config`.
@@ -27,27 +38,26 @@ If you wish students to be able to `ssh` into the student envrionment using a pa
 To setup the student accounts where each student has mysql, postgresql, and chinook-mysql Docker containers, run the `scripts/setup` script on the student environment droplet. Pass the desired default password (for all student accounts) as a parameter:
 
 ```
-./scripts/setup ${default-password}
+$ curl -o /root/setup \
+  https://raw.githubusercontent.com/quintessence/gdisetup/master/scripts/setup
+$ chmod 0755 setup
+$ ./setup ${default-password}
 ```
 
 If unspecified, the default password will be `p@ssw0rd`.
 
+If you are a student setting up this environment for yourself, then I'd recommend editing the script to only create a `student` account rather than all 10 student accounts and an instructor account to save time.
+
 ## Accessing the containers
 
-By default, the `Vagrantfile` and `scripts/setup` will setup 10 student accounts, named `student1` ... `student10` and will append the account username to the Docker container type, e.g. `chinook-mysql-student1`, to separate which containers are for which users. Use the following command to list the container IDs and names with the containers associated (by name only) with the account you are logged in as:
+By default,`scripts/setup` will create 10 student accounts and an instructor account as well as mysql, postgresql, and chinook-mysql Docker containers for each user. The containers are named by appending the account username to the Docker container type, e.g. `chinook-mysql-student1`. To access a specific Docker container, run the following:
 
 ```
-docker ps | grep $(whoami) | awk '{print $1 "\t" $NF}'
+$ docker exec -it ${container_name} /bin/bash
 ```
 
-To access a specific Docker container, run the following using the container ID that matches the container you wish to enter:
+To view all the containers for your user, run:
 
 ```
-docker exec -it ${container_id} /bin/bash
+$ docker ps | grep $(whoami)
 ```
-
-You can also use the container name in place of the container ID.
-
-## Important Potential Issue
-
-Please read [Github Issue #178](https://github.com/devopsgroup-io/vagrant-digitalocean/issues/178) for an issue with SSH keys and Vagrant's DigitalOcean plugin. Although some users report being able to use only the name of the key if it's already been added to DigitalOcean, my experience has been somewhat inconsistent in that sometimes I need to remove the key from DigitalOcean so it is "new" and other times I do not. Your mileage may vary.
